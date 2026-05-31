@@ -23,13 +23,24 @@ jobs:
         with:
           node-version: 22
 
-      - name: Install
-        run: npm install
+      # ✨ 强制安装 pnpm 并跳过可能导致冲突的构建脚本
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
 
-      - name: Build
-        run: npm run build
+      # ✨ 核心：使用 --no-frozen-lockfile 允许 pnpm 在云端智能调和版本
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
 
-      - name: Upload Pages Artifact
+      # ✨ 强制同步 Astro 类型文件
+      - name: Sync Astro Types
+        run: pnpm exec astro sync
+
+      - name: Build with Astro
+        run: pnpm run build
+
+      - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./dist
