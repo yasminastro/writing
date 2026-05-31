@@ -4,7 +4,7 @@ import {
   fontProviders,
   svgoOptimizer,
 } from "astro/config";
-import tailwindcss from "@tailwindcss/vite";
+import tailwind from "@astrojs/tailwind";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import remarkToc from "remark-toc";
@@ -21,6 +21,7 @@ export default defineConfig({
   site: "https://yasminastro.github.io",
   base: "/writing",
   integrations: [
+    tailwind(),
     mdx(),
     sitemap({
       filter: page =>
@@ -47,9 +48,6 @@ export default defineConfig({
         transformerNotationDiff({ matchAlgorithm: "v3" }),
       ],
     },
-  },
-  vite: {
-    plugins: [tailwindcss()as any],
   },
   fonts: [
     {
